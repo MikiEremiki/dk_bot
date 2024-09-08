@@ -1,0 +1,61 @@
+name: "name_project"
+services:
+  app:
+    profiles: [ "app", "all" ]
+    container_name: app
+    build:
+      context: .
+    image: template_app:v1
+    restart: always
+#    depends_on:
+#      nats:
+#        condition: service_started
+#      postgres:
+#        condition: service_healthy
+    networks:
+      - network
+      - backend
+#    environment:
+#      CONFIG_PATH: '/app/config/'
+    volumes:
+#      - ./config:/app/config:ro
+#      - ./config/settings.py:/app/src/settings/settings.py
+#      - ./src/db/data:/app/src/db/data
+      - ./src/log/archive:/app/src/log/archive
+    command: python /app/src
+
+  nats:
+    profiles: [ "all" ]
+    image: nats:latest
+    container_name: nats-server-dk
+    entrypoint: /nats-server
+    command: "-c /server.conf"
+    ports:
+#      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - network
+    volumes:
+      - nats-data-dk:/data
+      - ./server.conf:/server.conf
+
+  migration:
+    profiles: [ "migration" ]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: psql_migration:v1
+    restart: no
+    networks:
+      - backend
+    command: tail -F anything
+
+volumes:
+  nats-data-dk:
+
+networks:
+  network:
+    name: name_project
+  backend:
+    name: backend
+    external: true

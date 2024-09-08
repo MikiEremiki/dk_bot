@@ -1,0 +1,9 @@
+[default]
+bot__developer_chat_id = 454342281
+
+postgres__is_echo = false
+
+path__locales = "/app/src/locales/ru/txt.ftl"
+
+[windows]
+path__locales = "locales/ru/txt.ftl"
