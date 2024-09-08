@@ -1,0 +1,8 @@
+
+# Ignore dynaconf secret files
+.secrets.*
+/server.conf
+/alembic.ini
+**/*.log
+/.venv
+/.idea
