@@ -33,6 +33,7 @@ class TrackAllUsersMiddleware(BaseMiddleware):
                 chat_id=event.chat.id,
                 first_name=event.from_user.first_name,
                 last_name=event.from_user.last_name,
+                username=event.from_user.username,
             )
             self.cache[user_id] = None
         return await handler(event, data)

@@ -11,6 +11,7 @@ async def upsert_user(
         chat_id: int,
         first_name: str,
         last_name: str | None = None,
+        username: str | None = None,
 ):
     """
     Добавление или обновление пользователя в таблице users
@@ -19,6 +20,7 @@ async def upsert_user(
     :param chat_id: айди чата
     :param first_name: имя пользователя
     :param last_name: фамилия пользователя
+    :param username: никнейм пользователя
     """
     stmt = insert(User).values(
         {
@@ -26,6 +28,7 @@ async def upsert_user(
             'chat_id': chat_id,
             'first_name': first_name,
             'last_name': last_name,
+            'username': username,
         }
     )
     stmt = stmt.on_conflict_do_update(
@@ -34,6 +37,7 @@ async def upsert_user(
             chat_id=chat_id,
             first_name=first_name,
             last_name=last_name,
+            username=username,
         ),
     )
     await session.execute(stmt)

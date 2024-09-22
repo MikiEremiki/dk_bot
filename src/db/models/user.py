@@ -15,6 +15,8 @@ class User(BaseModelTimed):
     chat_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True)
+    username: Mapped[str | None] = mapped_column(String, nullable=True)
+    fio: Mapped[str | None] = mapped_column(String, nullable=True)
     role: Mapped[UserRole] = mapped_column(
         Enum(UserRole),
         nullable=False,
