@@ -16,7 +16,11 @@ class User(BaseModelTimed):
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str | None] = mapped_column(String, nullable=True)
     role: Mapped[UserRole] = mapped_column(
-        Enum(UserRole), nullable=False, default=UserRole.GUEST)
+        Enum(UserRole),
+        nullable=False,
+        default=UserRole.GUEST.name,
+        server_default=UserRole.GUEST.name
+    )
 
     supply_requests: Mapped[List['SupplyRequest']] = relationship(
         secondary='users_supply_requests',
