@@ -37,6 +37,7 @@ async def upsert_user(
         ),
     )
     await session.execute(stmt)
+    await session.commit()
 
 
 async def create_supply_request(
