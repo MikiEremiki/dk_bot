@@ -63,12 +63,13 @@ async def attach_supply_request_to_user(
         supply_request_id: int,
 ):
     supply_request = await session.get(SupplyRequest, supply_request_id)
-    await session.refresh(supply_request)
-    for user_id in user_ids:
-        user = await session.get(User, user_id)
-        if user:
-            supply_request.users.append(user)
-    await session.commit()
+    if isinstance(supply_request, SupplyRequest):
+        await session.refresh(supply_request)
+        for user_id in user_ids:
+            user = await session.get(User, user_id)
+            if user:
+                supply_request.users.append(user)
+        await session.commit()
 
 
 async def get_supply_request_by_user(
