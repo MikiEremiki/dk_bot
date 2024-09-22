@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -86,3 +86,21 @@ async def get_supply_request_by_user(
     supply_requests = res.scalars().all()
 
     return supply_requests
+
+
+async def get_all_users(session: AsyncSession):
+    stmt = select(User)
+    res = await session.execute(stmt)
+    users = res.scalars().all()
+
+    return users
+
+
+async def update_role(
+        session: AsyncSession,
+        user_id: int,
+        new_role
+):
+    stmt = update(User).where(User.user_id == user_id).values(role=new_role)
+    await session.execute(stmt)
+    await session.commit()

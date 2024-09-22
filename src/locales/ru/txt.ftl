@@ -22,6 +22,10 @@ settings-supply_request-responsible-correct_cmd = Вы ввели не прав�
 settings-supply_request-responsible = Ответственные
 settings-supply_request-responsible-current_list = Текущий список людей:
 
+settings-role = Роли
+settings-role-user-info = Выберите пользователя:
+settings-role-change-info = Выберите новую роль для пользователя:
+
 supply_request-help = Для создания заявки отправьте или перешлите файл
 supply_request-create = Создать заявку
 supply_request-document-apply = Документ получен

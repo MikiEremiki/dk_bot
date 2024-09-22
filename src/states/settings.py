@@ -8,3 +8,9 @@ class Settings(StatesGroup):
 class SupplyRequestSettings(StatesGroup):
     START = State()
     RESPONSIBLE = State()
+
+
+class RoleSettings(StatesGroup):
+    SELECT_USER = State()
+    SELECT_ROLE = State()
+    CONFIRM = State()

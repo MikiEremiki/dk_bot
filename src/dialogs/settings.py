@@ -12,6 +12,11 @@ settings_dialog = Dialog(
             id='settings_supply_request',
             state=states.SupplyRequestSettings.START,
         ),
+        Start(
+            text=I18NFormat('settings-role'),
+            id='settings_role',
+            state=states.RoleSettings.SELECT_USER,
+        ),
         Cancel(I18NFormat('cancel')),
         state=states.Settings.MAIN,
     ),
