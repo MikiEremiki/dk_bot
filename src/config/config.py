@@ -37,12 +37,12 @@ class Config(BaseSettings):
     paths: PathsSettings
 
 
-def load_config() -> Config:
+def load_config(env=None) -> Config:
     dyna_settings = Dynaconf(
         envvar_prefix='DYNACONF',
         settings_files=['settings.toml', '.secrets.toml'],
         environments=True,
-        # env='windows'
+        env=env
     )
     config = Config(
         bot=BotSettings(token=dyna_settings.bot.token,

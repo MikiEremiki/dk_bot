@@ -11,7 +11,7 @@ from alembic import context
 from db import Base
 from config import load_config
 
-bot_config = load_config()
+bot_config = load_config('windows')
 
 config = context.config
 config.set_main_option(
