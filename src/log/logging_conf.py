@@ -5,8 +5,7 @@ import logging.handlers
 from rich.console import Console
 from rich.highlighter import Highlighter
 from rich.logging import RichHandler
-from rich.text import Text
-from rich.traceback import install
+from rich.traceback import install, Traceback
 
 log_folder_name = 'archive'
 log_filename = 'bot.log'
@@ -22,11 +21,9 @@ POSTGRES_LOG_FILENAME = pathlib.Path(
 if not absolute_path.exists():
     os.mkdir(log_folder_name)
 
-fmt = ('{levelname} | {name}:{lineno}:{funcName} | '
-       'module={module} |\n'
-       '{message}')
+fmt = '{levelname} | {name}:{lineno}:{funcName} | module={module}'
 bf = logging.Formatter(fmt, style='{')
-log_time_format='%Y-%m-%d %H:%M:%S'
+log_time_format = '%Y-%m-%d %H:%M:%S'
 width = 150
 
 
@@ -58,8 +55,35 @@ class RotatingRichFileHandler(logging.handlers.RotatingFileHandler):
 
     def emit(self, record):
         try:
+            if self.shouldRollover(record):
+                self.doRollover()
+                self.console = Console(file=self.stream,
+                                       highlighter=MyHighlighter(),
+                                       log_time_format=log_time_format,
+                                       log_path=False,
+                                       width=width)
+
             msg = self.format(record)
-            self.console.log(Text(msg))
+            self.console.log(msg)
+            if record.exc_info:
+                exc_type, exc_value, exc_tb = record.exc_info
+                tb = Traceback.from_exception(
+                    exc_type,
+                    exc_value,
+                    exc_tb,
+                    width=width,
+                    show_locals=True,
+                    max_frames=10
+                )
+                self.console.print('TRACEBACK')
+                self.console.print(tb)
+            else:
+                if hasattr(record.msg, 'model_dump'):
+                    record.msg = record.msg.model_dump()
+                if isinstance(record.msg, str):
+                    self.console.print(record.message)
+                else:
+                    self.console.print(record.msg)
             self.flush()
         except Exception:
             self.handleError(record)
@@ -69,14 +93,11 @@ def load_log_config():
     install(console=Console(), max_frames=4, width=None)
     rich_handler = RichHandler(
         console=Console(width=width),
-        # tracebacks_show_locals=True,
-        rich_tracebacks=True,
         log_time_format=log_time_format
     )
     rich_handler.addFilter(sql_alchemy_filter)
 
     main_log_file_handler = RotatingRichFileHandler(LOG_FILENAME,
-                                                    mode='w',
                                                     maxBytes=1024000,
                                                     backupCount=5,
                                                     encoding='utf-8')
@@ -85,14 +106,13 @@ def load_log_config():
 
     postgres_log_file_handler = RotatingRichFileHandler(
         POSTGRES_LOG_FILENAME,
-        mode='w',
         maxBytes=2048000,
         backupCount=10,
         encoding='utf-8')
     postgres_log_file_handler.setFormatter(bf)
 
     root = logging.getLogger()
-    root.setLevel('INFO')
+    root.setLevel('DEBUG')
 
     root.addHandler(rich_handler)
     root.addHandler(main_log_file_handler)

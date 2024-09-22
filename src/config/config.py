@@ -37,7 +37,7 @@ class Config(BaseSettings):
     paths: PathsSettings
 
 
-def load_config(env=None) -> Config:
+def load_config(env='default') -> Config:
     dyna_settings = Dynaconf(
         envvar_prefix='DYNACONF',
         settings_files=['settings.toml', '.secrets.toml'],

@@ -29,7 +29,7 @@ bot_logger.info('Инициализация бота')
 
 
 async def main():
-    config: Config = load_config()
+    config: Config = load_config('windows')
 
     app = create_app(
         servers=str(config.nats.host),
