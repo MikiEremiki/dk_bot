@@ -3,7 +3,7 @@
 .secrets.*
 /server.conf
 /alembic.ini
-**/*.log
+**/*.log*
 /.venv
 /.idea
 /docker-compose-dev.yml

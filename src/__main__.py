@@ -15,6 +15,7 @@ from config.config import Config
 from handlers.errors import on_unknown_intent, on_unknown_state
 from log.logging_conf import load_log_config
 from storage.nats_storage import NatsStorage
+from middlewares.logging import LoggingMiddleware
 from middlewares.i18n import TranslatorRunnerMiddleware
 from middlewares.session import DbSessionMiddleware
 from middlewares.track_all_users import TrackAllUsersMiddleware
@@ -55,6 +56,7 @@ async def main():
     sessionmaker = async_sessionmaker(async_engine, expire_on_commit=False)
     translator_hub: TranslatorHub = create_translator_hub(config)
 
+    dp.message.outer_middleware(LoggingMiddleware())
     dp.message.outer_middleware(TrackAllUsersMiddleware())
     dp.update.outer_middleware(DbSessionMiddleware(sessionmaker))
     dp.update.outer_middleware(TranslatorRunnerMiddleware(translator_hub))
