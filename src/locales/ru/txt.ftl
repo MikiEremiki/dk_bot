@@ -37,3 +37,9 @@ supply_request-comment-enter = Ваше примечание:
 supply_request-comment-help = <i>Можете прислать новый текст, чтобы изменить примечание или подтвердите примечание</i>
 supply_request-edit = Изменить заявку
 supply_request-get = Мои заявки
+
+register-start = Зарегистрироваться
+register-phone = Введите ваш номер телефона
+register-real_name = Введите ваши Имя и Фамилию
+register-full_tg_name = Ваши Имя и Фамилию заданные в telegram:
+ <code>{ $full_name }</code>
