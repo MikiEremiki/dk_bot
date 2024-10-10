@@ -15,10 +15,6 @@ class PostgresSettings(BaseModel):
     is_echo: bool
 
 
-class RedisSettings(BaseModel):
-    dsn: RedisDsn
-
-
 class NatsSettings(BaseModel):
     host: NatsDsn
     user: SecretStr
@@ -32,7 +28,6 @@ class PathsSettings(BaseModel):
 class Config(BaseSettings):
     bot: BotSettings
     postgres: PostgresSettings
-    redis: RedisSettings
     nats: NatsSettings
     paths: PathsSettings
 
@@ -49,7 +44,6 @@ def load_config(env='default') -> Config:
                         developer_chat_id=dyna_settings.bot.developer_chat_id),
         postgres=PostgresSettings(dsn=dyna_settings.postgres.dsn,
                                   is_echo=dyna_settings.postgres.is_echo),
-        redis=RedisSettings(dsn=dyna_settings.redis.dsn),
         nats=NatsSettings(host=dyna_settings.nats.host,
                           user=dyna_settings.nats.user,
                           password=dyna_settings.nats.password),
